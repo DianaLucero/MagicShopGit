@@ -1,0 +1,74 @@
+﻿@model IEnumerable<ApplicationUser>
+<br />
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-primary">Lista de usuarios</h2>
+    </div>
+</div>
+<div class="p-4 border rounded">
+    @if (Model.Count() > 0)
+    {
+        <table class="table table-striped border">
+            <tr class="table-secondary">
+                <th>
+                    Email
+                </th>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Roles
+                </th>
+                <th></th>
+            </tr>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Email
+                    </td>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Role
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <form asp-area="" asp-action="Delete" asp-route-userId="@item.Id">
+                                <a asp-area="" asp-action="Edit" asp-route-userId="@item.Id" class="btn btn-info text-white" style="cursor:pointer">
+                                    Editar
+                                </a>
+
+                                <a asp-area="" asp-action="ManageUserClaims" asp-route-userId="@item.Id" class="btn btn-primary text-white"
+                                   style="cursor:pointer">Permisos</a>
+
+                                @if (item.LockoutEnd == null || item.LockoutEnd < DateTime.Now)
+                                {
+                                    //we want to show them the option to lock
+                                    <button asp-area="" asp-action="LockUnlock" asp-route-userId="@item.Id" class="btn btn-success text-white"
+                                            style="cursor:pointer">
+                                        <span>&nbsp; Bloquear &nbsp;</span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    //we want to show them the option to unlock
+                                    <button asp-area="" asp-action="LockUnlock" asp-route-userId="@item.Id" class="btn btn-warning text-white"
+                                            style="cursor:pointer">
+                                        <span>Desbloquear</span>
+                                    </button>
+                                }
+
+                                <button type="submit" onclick="return confirm('¿Estás seguro de querer borrar esto?')"
+                                        class="btn btn-danger">
+                                    BORRAR
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+</div>
